@@ -57,7 +57,11 @@ function FieldForm1(props) {
         {props.label}
       </label>
       <div className="field--input">
-        <input className="input" type="text" placeholder={props.label} />
+        <input
+          className="input"
+          type={props.id === "email" ? "email" : "text"}
+          placeholder={props.label}
+        />
         <img className="icon--form1" src={props.icon} alt={props.label} />
       </div>
       <span className="label--msg">{props.msg}</span>
@@ -136,6 +140,42 @@ function Form2() {
   );
 }
 
+function FieldForm3(props) {
+  return (
+    <div class="radio">
+      <input id={props.label} name={props.name} type="radio" />
+      <label htmlFor={props.label} class="radio-label">
+        {props.label}
+      </label>
+    </div>
+  );
+}
+
+function Form3() {
+  return (
+    <div className="form1">
+      <div className="header header--medium">What’s your project budget?</div>
+      <div className="description" style={{ marginBottom: "39.13px" }}>
+        Please select the project budget range you have in mind.
+      </div>
+      <div className="grid--container2">
+        <div className="grid--box2">
+          <FieldForm3 name="budget" label="$5.000 - $10.000" />
+        </div>
+        <div className="grid--box2">
+          <FieldForm3 name="budget" label="$10.000 - $20.000" />
+        </div>
+        <div className="grid--box2">
+          <FieldForm3 name="budget" label="$20.000 - $50.000" />
+        </div>
+        <div className="grid--box2">
+          <FieldForm3 name="budget" label="$50.000 +" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const handleIncrement = () => {
   setStep(step + 1);
 };
@@ -175,6 +215,7 @@ function App() {
         <div className="line" />
         {step === 1 && <Form1 />}
         {step === 2 && <Form2 />}
+        {step === 3 && <Form3 />}
       </div>
 
       <div
