@@ -176,6 +176,33 @@ function Form3() {
   );
 }
 
+function Form4() {
+  return (
+    <div className="form1 form4">
+      <img
+        className="icon--form4"
+        src="images/icon_submit.png"
+        width="25%"
+        alt="Submit"
+      />
+      <div className="header header--medium">Submit your quote request</div>
+      <div
+        className="description"
+        style={{
+          textAlign: "center",
+          width: "495px",
+          marginBottom: "12px",
+        }}
+      >
+        Please review all the information you previously typed in the past
+        steps, and if all is okay, submit your message to receive a project
+        quote in 24 - 48 hours.
+      </div>
+      <div class="button--submit">Submit</div>
+    </div>
+  );
+}
+
 const handleIncrement = () => {
   setStep(step + 1);
 };
@@ -216,6 +243,7 @@ function App() {
         {step === 1 && <Form1 />}
         {step === 2 && <Form2 />}
         {step === 3 && <Form3 />}
+        {step === 4 && <Form4 />}
       </div>
 
       <div
