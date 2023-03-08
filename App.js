@@ -51,25 +51,58 @@ function RenderStep(props) {
 }
 
 function FieldForm1(props) {
+  function handleChange(event) {
+    props.setQuote((prevData) => {
+      return {
+        ...prevData,
+        [event.target.name]: event.target.value,
+      };
+    });
+  }
+
+  const isValid =
+    props.id === "name" ||
+    (props.id === "email" &&
+      (props.value.trim() === "" || valEmail(props.value))) ||
+    (props.id === "phone" &&
+      (props.value.length === 0 || valPhone(props.value))) ||
+    (props.id === "company" && props.value.trim() != "");
   return (
     <div className="field--form1">
-      <label className="label--form1" htmlFor={props.id}>
+      <label
+        className="label--form1"
+        htmlFor={props.id}
+        style={
+          isValid
+            ? { color: "var(--neutral-800)" }
+            : { color: "var(--primary-color2)" }
+        }
+      >
         {props.label}
       </label>
       <div className="field--input">
         <input
           className="input"
+          id={props.id}
+          name={props.id}
           type={props.id === "email" ? "email" : "text"}
           placeholder={props.label}
+          onChange={handleChange}
+          value={props.value}
         />
         <img className="icon--form1" src={props.icon} alt={props.label} />
       </div>
-      <span className="label--msg">{props.msg}</span>
+      <span
+        className="label--msg"
+        style={isValid ? { visibility: "hidden" } : { visibility: "visible" }}
+      >
+        {props.msg}
+      </span>
     </div>
   );
 }
 
-function Form1() {
+function Form1(props) {
   return (
     <div className="form1">
       <div className="header header--medium">Contact details</div>
@@ -78,16 +111,32 @@ function Form1() {
       </div>
       <div className="grid--container">
         <div className="grid--box">
-          <FieldForm1 id="name" label="Name" icon="images/icon_name.png" />
+          <FieldForm1
+            id="name"
+            label="Name"
+            icon="images/icon_name.png"
+            value={props.data.name}
+            setQuote={props.setQuote}
+          />
         </div>
         <div className="grid--box">
-          <FieldForm1 id="email" label="Email" icon="images/icon_email.png" />
+          <FieldForm1
+            id="email"
+            label="Email"
+            icon="images/icon_email.png"
+            msg="Email is invalid."
+            value={props.data.email}
+            setQuote={props.setQuote}
+          />
         </div>
         <div className="grid--box">
           <FieldForm1
             id="phone"
             label="Phone Number"
             icon="images/icon_phone.png"
+            msg="Phone is invalid."
+            value={props.data.phone}
+            setQuote={props.setQuote}
           />
         </div>
         <div className="grid--box">
@@ -96,12 +145,23 @@ function Form1() {
             label="Company"
             icon="images/icon_company.png"
             msg="Company is required."
+            value={props.data.company}
+            setQuote={props.setQuote}
           />
         </div>
       </div>
     </div>
   );
 }
+
+const styleNormal = {
+  border: "1px solid var(--neutral-300)",
+  boxShadow: "0px 2px 6px rgba(19, 18, 66, 0.07)",
+};
+const styleSelected = {
+  border: "2px solid var(--primary-color)",
+  boxShadow: "0px 2px 6px rgba(19, 18, 66, 0.07)",
+};
 
 function FieldForm2(props) {
   return (
@@ -115,7 +175,7 @@ function FieldForm2(props) {
   );
 }
 
-function Form2() {
+function Form2(props) {
   return (
     <div className="form1">
       <div className="header header--medium">Our services</div>
@@ -123,17 +183,83 @@ function Form2() {
         Please select which service you are interested in.
       </div>
       <div className="grid--container2">
-        <div className="grid--box2">
-          <FieldForm2 label="Development" icon="images/icon_dev.png" />
+        <div
+          className="grid--box2 pointer"
+          style={
+            props.data.service === "Development" ? styleSelected : styleNormal
+          }
+          onClick={() => {
+            props.setQuote((prevData) => {
+              return {
+                ...prevData,
+                service: "Development",
+              };
+            });
+          }}
+        >
+          <FieldForm2
+            label="Development"
+            icon="images/icon_dev.png"
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm2 label="Web Design" icon="images/icon_web.png" />
+        <div
+          className="grid--box2 pointer"
+          style={
+            props.data.service === "Web Design" ? styleSelected : styleNormal
+          }
+          onClick={() => {
+            props.setQuote((prevData) => {
+              return {
+                ...prevData,
+                service: "Web Design",
+              };
+            });
+          }}
+        >
+          <FieldForm2
+            label="Web Design"
+            icon="images/icon_web.png"
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm2 label="Marketing" icon="images/icon_mar.png" />
+        <div
+          className="grid--box2 pointer"
+          style={
+            props.data.service === "Marketing" ? styleSelected : styleNormal
+          }
+          onClick={() => {
+            props.setQuote((prevData) => {
+              return {
+                ...prevData,
+                service: "Marketing",
+              };
+            });
+          }}
+        >
+          <FieldForm2
+            label="Marketing"
+            icon="images/icon_mar.png"
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm2 label="Other" icon="images/icon_oth.png" />
+        <div
+          className="grid--box2 pointer"
+          style={props.data.service === "Other" ? styleSelected : styleNormal}
+          onClick={() => {
+            props.setQuote((prevData) => {
+              return {
+                ...prevData,
+                service: "Other",
+              };
+            });
+          }}
+        >
+          <FieldForm2
+            label="Other"
+            icon="images/icon_oth.png"
+            setQuote={props.setQuote}
+          />
         </div>
       </div>
     </div>
@@ -141,17 +267,34 @@ function Form2() {
 }
 
 function FieldForm3(props) {
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target;
+    props.setQuote((prevData) => {
+      return {
+        ...prevData,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
+  }
+
   return (
-    <div class="radio">
-      <input id={props.label} name={props.name} type="radio" />
-      <label htmlFor={props.label} class="radio-label">
+    <div className="radio">
+      <input
+        id={props.label}
+        name={props.name}
+        value={props.label}
+        type="radio"
+        onChange={handleChange}
+        checked={props.value === props.label}
+      />
+      <label htmlFor={props.label} className="radio-label">
         {props.label}
       </label>
     </div>
   );
 }
 
-function Form3() {
+function Form3(props) {
   return (
     <div className="form1">
       <div className="header header--medium">What’s your project budget?</div>
@@ -159,24 +302,70 @@ function Form3() {
         Please select the project budget range you have in mind.
       </div>
       <div className="grid--container2">
-        <div className="grid--box2">
-          <FieldForm3 name="budget" label="$5.000 - $10.000" />
+        <div
+          className="grid--box2"
+          style={
+            props.data.budget === "$5.000 - $10.000"
+              ? styleSelected
+              : styleNormal
+          }
+        >
+          <FieldForm3
+            name="budget"
+            label="$5.000 - $10.000"
+            value={props.data.budget}
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm3 name="budget" label="$10.000 - $20.000" />
+        <div
+          className="grid--box2"
+          style={
+            props.data.budget === "$10.000 - $20.000"
+              ? styleSelected
+              : styleNormal
+          }
+        >
+          <FieldForm3
+            name="budget"
+            label="$10.000 - $20.000"
+            value={props.data.budget}
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm3 name="budget" label="$20.000 - $50.000" />
+        <div
+          className="grid--box2"
+          style={
+            props.data.budget === "$20.000 - $50.000"
+              ? styleSelected
+              : styleNormal
+          }
+        >
+          <FieldForm3
+            name="budget"
+            label="$20.000 - $50.000"
+            value={props.data.budget}
+            setQuote={props.setQuote}
+          />
         </div>
-        <div className="grid--box2">
-          <FieldForm3 name="budget" label="$50.000 +" />
+        <div
+          className="grid--box2"
+          style={
+            props.data.budget === "$50.000 +" ? styleSelected : styleNormal
+          }
+        >
+          <FieldForm3
+            name="budget"
+            label="$50.000 +"
+            value={props.data.budget}
+            setQuote={props.setQuote}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function Form4() {
+function Form4(props) {
   return (
     <div className="form1 form4">
       <img
@@ -191,25 +380,22 @@ function Form4() {
         style={{
           textAlign: "center",
           width: "495px",
-          marginBottom: "12px",
+          marginBottom: "24px",
         }}
       >
         Please review all the information you previously typed in the past
         steps, and if all is okay, submit your message to receive a project
         quote in 24 - 48 hours.
       </div>
-      <div class="button--submit">Submit</div>
+      <div
+        className="button--submit"
+        onClick={() => alert(JSON.stringify(props.data))}
+      >
+        Submit
+      </div>
     </div>
   );
 }
-
-const handleIncrement = () => {
-  setStep(step + 1);
-};
-
-const handleDecrement = () => {
-  setStep(step - 1);
-};
 
 function Button(props) {
   return (
@@ -219,10 +405,41 @@ function Button(props) {
   );
 }
 
+function valEmail(email) {
+  if (/^\w+([\.-]?\w+)*@gmail.com$/.test(email)) {
+    return true;
+  }
+  return false;
+}
+
+function valPhone(phone) {
+  if (/^08?(\d{7,10}$)/.test(phone)) {
+    return true;
+  }
+  return false;
+}
+
 function App() {
   const [step, setStep] = React.useState(1);
+  const [quote, setQuote] = React.useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    service: "Development",
+    budget: "$50.000 +",
+  });
 
-  React.useEffect(() => {}, [step]);
+  function handleIncrement() {
+    valEmail(quote.email) && // email validation
+      valPhone(quote.phone) && // phone validation
+      quote.company != "" && // is required
+      setStep((prevStep) => prevStep + 1);
+  }
+
+  function handleDecrement() {
+    setStep((prevStep) => prevStep - 1);
+  }
 
   return (
     <div className="home">
@@ -240,10 +457,10 @@ function App() {
       <div className="container">
         <RenderStep step={step} />
         <div className="line" />
-        {step === 1 && <Form1 />}
-        {step === 2 && <Form2 />}
-        {step === 3 && <Form3 />}
-        {step === 4 && <Form4 />}
+        {step === 1 && <Form1 data={quote} setQuote={setQuote} />}
+        {step === 2 && <Form2 data={quote} setQuote={setQuote} />}
+        {step === 3 && <Form3 data={quote} setQuote={setQuote} />}
+        {step === 4 && <Form4 data={quote} />}
       </div>
 
       <div
@@ -255,21 +472,9 @@ function App() {
         }
       >
         {step > 1 && (
-          <Button
-            title="Previous step"
-            handleClick={() => {
-              setStep(step - 1);
-            }}
-          />
+          <Button title="Previous step" handleClick={handleDecrement} />
         )}
-        {step < 4 && (
-          <Button
-            title="Next step"
-            handleClick={() => {
-              setStep(step + 1);
-            }}
-          />
-        )}
+        {step < 4 && <Button title="Next step" handleClick={handleIncrement} />}
       </div>
     </div>
   );
