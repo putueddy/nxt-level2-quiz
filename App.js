@@ -6,7 +6,7 @@ function RenderStep(props) {
     <div className="render--step">
       {renderStep.map((i, index) => {
         return (
-          <div className="step" key={index}>
+          <div className="step" key={self.crypto.randomUUID()}>
             <div
               className="step--circle"
               style={
@@ -480,4 +480,8 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
