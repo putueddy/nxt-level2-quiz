@@ -443,7 +443,7 @@ function App() {
                 />
               </div>
               <div className="grid--box">
-                {/* <Input
+                <Input
                   type="email"
                   name="email"
                   placeholder="Email"
@@ -452,7 +452,7 @@ function App() {
                   value={quote.email}
                   handleChange={handleChange}
                   ref={emailRef}
-                /> */}
+                />
               </div>
               <div className="grid--box">
                 {/* <Input
