@@ -455,7 +455,7 @@ function App() {
                 />
               </div>
               <div className="grid--box">
-                {/* <Input
+                <Input
                   type="number"
                   name="phone"
                   placeholder="Phone Number"
@@ -464,7 +464,7 @@ function App() {
                   value={quote.phone}
                   handleChange={handleChange}
                   ref={phoneRef}
-                /> */}
+                />
               </div>
               <div className="grid--box">
                 {/* <Input
