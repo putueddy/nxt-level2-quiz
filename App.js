@@ -467,7 +467,7 @@ function App() {
                 />
               </div>
               <div className="grid--box">
-                {/* <Input
+                <Input
                   type="text"
                   name="company"
                   placeholder="Company"
@@ -476,7 +476,7 @@ function App() {
                   value={quote.company}
                   handleChange={handleChange}
                   ref={companyRef}
-                /> */}
+                />
               </div>
             </div>
           </div>
