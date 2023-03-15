@@ -297,8 +297,8 @@ const Input = React.forwardRef(
   ({ type, name, placeholder, icon, msg, value, handleChange }, ref) => {
     const isValid =
       (name === "name" && value.trim() != "") ||
-      (name === "email" && (value.trim() != "" || valEmail(value))) ||
-      (name === "phone" && (value.length != 0 || valPhone(value))) ||
+      (name === "email" && valEmail(value)) ||
+      (name === "phone" && valPhone(value)) ||
       (name === "company" && value.trim() != "");
     return (
       <div className="field--form1">
