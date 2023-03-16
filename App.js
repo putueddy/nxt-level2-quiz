@@ -460,7 +460,7 @@ function App() {
                   name="phone"
                   placeholder="Phone Number"
                   icon="images/icon_phone.png"
-                  msg="Phone is invalid."
+                  msg="Phone number is invalid."
                   value={quote.phone}
                   handleChange={handleChange}
                   ref={phoneRef}
