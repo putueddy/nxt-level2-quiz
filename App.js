@@ -85,7 +85,7 @@ function Form2(props) {
             props.data.service === "Development" ? styleSelected : styleNormal
           }
           onClick={() => {
-            props.setQuote((prevData) => {
+            props.setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Development",
@@ -96,7 +96,7 @@ function Form2(props) {
           <FieldForm2
             label="Development"
             icon="images/icon_dev.png"
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
@@ -105,7 +105,7 @@ function Form2(props) {
             props.data.service === "Web Design" ? styleSelected : styleNormal
           }
           onClick={() => {
-            props.setQuote((prevData) => {
+            props.setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Web Design",
@@ -116,7 +116,7 @@ function Form2(props) {
           <FieldForm2
             label="Web Design"
             icon="images/icon_web.png"
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
@@ -125,7 +125,7 @@ function Form2(props) {
             props.data.service === "Marketing" ? styleSelected : styleNormal
           }
           onClick={() => {
-            props.setQuote((prevData) => {
+            props.setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Marketing",
@@ -136,14 +136,14 @@ function Form2(props) {
           <FieldForm2
             label="Marketing"
             icon="images/icon_mar.png"
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
           className="grid--box2 pointer"
           style={props.data.service === "Other" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setQuote((prevData) => {
+            props.setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Other",
@@ -154,7 +154,7 @@ function Form2(props) {
           <FieldForm2
             label="Other"
             icon="images/icon_oth.png"
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
       </div>
@@ -165,7 +165,7 @@ function Form2(props) {
 function FieldForm3(props) {
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
-    props.setQuote((prevData) => {
+    props.setFormValues((prevData) => {
       return {
         ...prevData,
         [name]: type === "checkbox" ? checked : value,
@@ -210,7 +210,7 @@ function Form3(props) {
             name="budget"
             label="$5.000 - $10.000"
             value={props.data.budget}
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
@@ -225,7 +225,7 @@ function Form3(props) {
             name="budget"
             label="$10.000 - $20.000"
             value={props.data.budget}
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
@@ -240,7 +240,7 @@ function Form3(props) {
             name="budget"
             label="$20.000 - $50.000"
             value={props.data.budget}
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
         <div
@@ -253,7 +253,7 @@ function Form3(props) {
             name="budget"
             label="$50.000 +"
             value={props.data.budget}
-            setQuote={props.setQuote}
+            setFormValues={props.setFormValues}
           />
         </div>
       </div>
@@ -297,8 +297,8 @@ const Input = React.forwardRef(
   ({ type, name, placeholder, icon, msg, value, handleChange }, ref) => {
     const isValid =
       (name === "name" && value.trim() != "") ||
-      (name === "email" && valEmail(value)) ||
-      (name === "phone" && valPhone(value)) ||
+      (name === "email" && validEmail(value)) ||
+      (name === "phone" && validPhone(value)) ||
       (name === "company" && value.trim() != "");
     return (
       <div className="field--form1">
@@ -344,14 +344,14 @@ function Button(props) {
   );
 }
 
-function valEmail(email) {
+function validEmail(email) {
   if (/^\w+([\.-]?\w+)*@gmail.com$/.test(email)) {
     return true;
   }
   return false;
 }
 
-function valPhone(phone) {
+function validPhone(phone) {
   if (/^08?(\d{7,10}$)/.test(phone)) {
     return true;
   }
@@ -360,7 +360,7 @@ function valPhone(phone) {
 
 function App() {
   const [step, setStep] = React.useState(1);
-  const [quote, setQuote] = React.useState({
+  const [formValues, setFormValues] = React.useState({
     name: "",
     email: "",
     phone: "",
@@ -374,12 +374,8 @@ function App() {
   const phoneRef = React.useRef();
   const companyRef = React.useRef();
 
-  React.useEffect(() => {
-    nameRef.current.focus();
-  }, []);
-
   function handleChange(event) {
-    setQuote((prevData) => {
+    setFormValues((prevData) => {
       return {
         ...prevData,
         [event.target.name]: event.target.value,
@@ -388,16 +384,16 @@ function App() {
   }
 
   function handleIncrement() {
-    if (quote.name === "") {
+    if (formValues.name === "") {
       return nameRef.current.focus();
     }
-    if (!valEmail(quote.email)) {
+    if (!validEmail(formValues.email)) {
       return emailRef.current.focus();
     }
-    if (!valPhone(quote.phone)) {
+    if (!validPhone(formValues.phone)) {
       return phoneRef.current.focus();
     }
-    if (quote.company === "") {
+    if (formValues.company === "") {
       return companyRef.current.focus();
     }
     setStep((prevStep) => prevStep + 1);
@@ -437,7 +433,7 @@ function App() {
                   placeholder="Name"
                   icon="images/icon_name.png"
                   msg="Name is required."
-                  value={quote.name}
+                  value={formValues.name}
                   handleChange={handleChange}
                   ref={nameRef}
                 />
@@ -449,7 +445,7 @@ function App() {
                   placeholder="Email"
                   icon="images/icon_email.png"
                   msg="Email is invalid."
-                  value={quote.email}
+                  value={formValues.email}
                   handleChange={handleChange}
                   ref={emailRef}
                 />
@@ -461,7 +457,7 @@ function App() {
                   placeholder="Phone Number"
                   icon="images/icon_phone.png"
                   msg="Phone number is invalid."
-                  value={quote.phone}
+                  value={formValues.phone}
                   handleChange={handleChange}
                   ref={phoneRef}
                 />
@@ -473,7 +469,7 @@ function App() {
                   placeholder="Company"
                   icon="images/icon_company.png"
                   msg="Company is required."
-                  value={quote.company}
+                  value={formValues.company}
                   handleChange={handleChange}
                   ref={companyRef}
                 />
@@ -481,9 +477,13 @@ function App() {
             </div>
           </div>
         )}
-        {step === 2 && <Form2 data={quote} setQuote={setQuote} />}
-        {step === 3 && <Form3 data={quote} setQuote={setQuote} />}
-        {step === 4 && <Form4 data={quote} />}
+        {step === 2 && (
+          <Form2 data={formValues} setFormValues={setFormValues} />
+        )}
+        {step === 3 && (
+          <Form3 data={formValues} setFormValues={setFormValues} />
+        )}
+        {step === 4 && <Form4 data={formValues} />}
       </div>
 
       <div
