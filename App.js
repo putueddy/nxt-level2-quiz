@@ -1,6 +1,6 @@
 "use strict";
 
-function RenderStep(props) {
+function RenderStep({ step }) {
   const renderStep = [1, 2, 3, 4];
   return (
     <div className="render--step">
@@ -10,7 +10,7 @@ function RenderStep(props) {
             <div
               className="step--circle"
               style={
-                i <= props.step
+                i <= step
                   ? {
                       backgroundColor: "var(--primary-color)",
                       color: "var(--neutral-100)",
@@ -26,15 +26,13 @@ function RenderStep(props) {
             {i < 4 && (
               <div className="progress--container">
                 <div className="progress--inner">
-                  {i === props.step && (
+                  {i === step && (
                     <div
                       className="progress--child"
-                      style={
-                        i <= props.step ? { width: "50%" } : { width: "0%" }
-                      }
+                      style={i <= step ? { width: "50%" } : { width: "0%" }}
                     ></div>
                   )}
-                  {i < props.step && (
+                  {i < step && (
                     <div
                       className="progress--child"
                       style={{ width: "100%" }}
@@ -59,19 +57,19 @@ const styleSelected = {
   boxShadow: "0px 2px 6px rgba(19, 18, 66, 0.07)",
 };
 
-function FieldForm2(props) {
+function FieldForm2({ label, icon }) {
   return (
     <div className="field--form2">
       <div className="field--input2">
         <div className="circle--form2"></div>
-        <img className="icon--form2" src={props.icon} alt={props.label} />
+        <img className="icon--form2" src={icon} alt={label} />
       </div>
-      <div className="label--form2">{props.label}</div>
+      <div className="label--form2">{label}</div>
     </div>
   );
 }
 
-function Form2(props) {
+function Form2({ data, setFormValues }) {
   return (
     <div className="form1">
       <div className="header header--medium">Our services</div>
@@ -81,11 +79,9 @@ function Form2(props) {
       <div className="grid--container2">
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Development" ? styleSelected : styleNormal
-          }
+          style={data.service === "Development" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setFormValues((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Development",
@@ -93,19 +89,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Development"
-            icon="images/icon_dev.png"
-            setFormValues={props.setFormValues}
-          />
+          <FieldForm2 label="Development" icon="images/icon_dev.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Web Design" ? styleSelected : styleNormal
-          }
+          style={data.service === "Web Design" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setFormValues((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Web Design",
@@ -113,19 +103,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Web Design"
-            icon="images/icon_web.png"
-            setFormValues={props.setFormValues}
-          />
+          <FieldForm2 label="Web Design" icon="images/icon_web.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Marketing" ? styleSelected : styleNormal
-          }
+          style={data.service === "Marketing" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setFormValues((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Marketing",
@@ -133,17 +117,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Marketing"
-            icon="images/icon_mar.png"
-            setFormValues={props.setFormValues}
-          />
+          <FieldForm2 label="Marketing" icon="images/icon_mar.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={props.data.service === "Other" ? styleSelected : styleNormal}
+          style={data.service === "Other" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setFormValues((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Other",
@@ -151,21 +131,17 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Other"
-            icon="images/icon_oth.png"
-            setFormValues={props.setFormValues}
-          />
+          <FieldForm2 label="Other" icon="images/icon_oth.png" />
         </div>
       </div>
     </div>
   );
 }
 
-function FieldForm3(props) {
+function FieldForm3({ name, label, value, setFormValues }) {
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
-    props.setFormValues((prevData) => {
+    setFormValues((prevData) => {
       return {
         ...prevData,
         [name]: type === "checkbox" ? checked : value,
@@ -176,21 +152,21 @@ function FieldForm3(props) {
   return (
     <div className="radio">
       <input
-        id={props.label}
-        name={props.name}
-        value={props.label}
+        id={label}
+        name={name}
+        value={label}
         type="radio"
         onChange={handleChange}
-        checked={props.value === props.label}
+        checked={value === label}
       />
-      <label htmlFor={props.label} className="radio-label">
-        {props.label}
+      <label htmlFor={label} className="radio-label">
+        {label}
       </label>
     </div>
   );
 }
 
-function Form3(props) {
+function Form3({ data, setFormValues }) {
   return (
     <div className="form1">
       <div className="header header--medium">What’s your project budget?</div>
@@ -201,59 +177,51 @@ function Form3(props) {
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$5.000 - $10.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$5.000 - $10.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$5.000 - $10.000"
-            value={props.data.budget}
-            setFormValues={props.setFormValues}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$10.000 - $20.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$10.000 - $20.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$10.000 - $20.000"
-            value={props.data.budget}
-            setFormValues={props.setFormValues}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$20.000 - $50.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$20.000 - $50.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$20.000 - $50.000"
-            value={props.data.budget}
-            setFormValues={props.setFormValues}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
-          style={
-            props.data.budget === "$50.000 +" ? styleSelected : styleNormal
-          }
+          style={data.budget === "$50.000 +" ? styleSelected : styleNormal}
         >
           <FieldForm3
             name="budget"
             label="$50.000 +"
-            value={props.data.budget}
-            setFormValues={props.setFormValues}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
       </div>
@@ -261,7 +229,7 @@ function Form3(props) {
   );
 }
 
-function Form4(props) {
+function Form4({ data }) {
   return (
     <div className="form1 form4">
       <img
@@ -285,7 +253,7 @@ function Form4(props) {
       </div>
       <div
         className="button--submit"
-        onClick={() => alert(JSON.stringify(props.data))}
+        onClick={() => alert(JSON.stringify(data))}
       >
         Submit
       </div>
