@@ -262,43 +262,19 @@ function Form4({ data }) {
 }
 
 const Input = React.forwardRef(
-  ({ type, name, placeholder, icon, msg, value, handleChange }, ref) => {
-    const isValid =
-      (name === "name" && value.trim() != "") ||
-      (name === "email" && validEmail(value)) ||
-      (name === "phone" && validPhone(value)) ||
-      (name === "company" && value.trim() != "");
+  ({ type, name, placeholder, icon, value, handleChange }, ref) => {
     return (
-      <div className="field--form1">
-        <label
-          className="label--form1"
-          htmlFor={name}
-          style={
-            isValid
-              ? { color: "var(--neutral-800)" }
-              : { color: "var(--primary-color2)" }
-          }
-        >
-          {placeholder}
-        </label>
-        <div className="field--input">
-          <input
-            className="input"
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            value={value}
-            onChange={handleChange}
-            ref={ref}
-          />
-          <img className="icon--form1" src={icon} alt={placeholder} />
-        </div>
-        <span
-          className="label--msg"
-          style={isValid ? { visibility: "hidden" } : { visibility: "visible" }}
-        >
-          {msg}
-        </span>
+      <div className="field--input">
+        <input
+          className="input"
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={handleChange}
+          ref={ref}
+        />
+        <img className="icon--form1" src={icon} alt={placeholder} />
       </div>
     );
   }
@@ -337,6 +313,13 @@ function App() {
     budget: "$50.000 +",
   });
 
+  const [inputValid, setInputValid] = React.useState({
+    name: true,
+    email: true,
+    phone: true,
+    company: true,
+  });
+
   const nameRef = React.useRef();
   const emailRef = React.useRef();
   const phoneRef = React.useRef();
@@ -349,19 +332,49 @@ function App() {
         [event.target.name]: event.target.value,
       };
     });
+    setInputValid((prevData) => {
+      return {
+        ...prevData,
+        [event.target.name]: true,
+      };
+    });
   }
 
   function handleIncrement() {
     if (formValues.name === "") {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          name: false,
+        };
+      });
       return nameRef.current.focus();
     }
     if (!validEmail(formValues.email)) {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          email: false,
+        };
+      });
       return emailRef.current.focus();
     }
     if (!validPhone(formValues.phone)) {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          phone: false,
+        };
+      });
       return phoneRef.current.focus();
     }
     if (formValues.company === "") {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          company: false,
+        };
+      });
       return companyRef.current.focus();
     }
     setStep((prevStep) => prevStep + 1);
@@ -395,52 +408,140 @@ function App() {
             </div>
             <div className="grid--container">
               <div className="grid--box">
-                <Input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  icon="images/icon_name.png"
-                  msg="Name is required."
-                  value={formValues.name}
-                  handleChange={handleChange}
-                  ref={nameRef}
-                />
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="name"
+                    style={
+                      inputValid.name
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Name
+                  </label>
+                  <Input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    icon="images/icon_name.png"
+                    value={formValues.name}
+                    handleChange={handleChange}
+                    ref={nameRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.name
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Name is required
+                  </span>
+                </div>
               </div>
               <div className="grid--box">
-                <Input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  icon="images/icon_email.png"
-                  msg="Email is invalid."
-                  value={formValues.email}
-                  handleChange={handleChange}
-                  ref={emailRef}
-                />
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="email"
+                    style={
+                      inputValid.email
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    icon="images/icon_email.png"
+                    value={formValues.email}
+                    handleChange={handleChange}
+                    ref={emailRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.email
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Email is invalid.
+                  </span>
+                </div>
               </div>
               <div className="grid--box">
-                <Input
-                  type="number"
-                  name="phone"
-                  placeholder="Phone Number"
-                  icon="images/icon_phone.png"
-                  msg="Phone number is invalid."
-                  value={formValues.phone}
-                  handleChange={handleChange}
-                  ref={phoneRef}
-                />
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="phone"
+                    style={
+                      inputValid.phone
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Phone Number
+                  </label>
+                  <Input
+                    type="number"
+                    name="phone"
+                    placeholder="Phone Number"
+                    icon="images/icon_phone.png"
+                    value={formValues.phone}
+                    handleChange={handleChange}
+                    ref={phoneRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.phone
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Phone number is invalid.
+                  </span>
+                </div>
               </div>
               <div className="grid--box">
-                <Input
-                  type="text"
-                  name="company"
-                  placeholder="Company"
-                  icon="images/icon_company.png"
-                  msg="Company is required."
-                  value={formValues.company}
-                  handleChange={handleChange}
-                  ref={companyRef}
-                />
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="company"
+                    style={
+                      inputValid.company
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Company
+                  </label>
+                  <Input
+                    type="text"
+                    name="company"
+                    placeholder="Company"
+                    icon="images/icon_company.png"
+                    value={formValues.company}
+                    handleChange={handleChange}
+                    ref={companyRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.company
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Company is required.
+                  </span>
+                </div>
               </div>
             </div>
           </div>
