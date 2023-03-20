@@ -1,16 +1,16 @@
 "use strict";
 
-function RenderStep(props) {
+function RenderStep({ step }) {
   const renderStep = [1, 2, 3, 4];
   return (
     <div className="render--step">
       {renderStep.map((i, index) => {
         return (
-          <div className="step" key={index}>
+          <div className="step" key={self.crypto.randomUUID()}>
             <div
               className="step--circle"
               style={
-                i <= props.step
+                i <= step
                   ? {
                       backgroundColor: "var(--primary-color)",
                       color: "var(--neutral-100)",
@@ -26,15 +26,13 @@ function RenderStep(props) {
             {i < 4 && (
               <div className="progress--container">
                 <div className="progress--inner">
-                  {i === props.step && (
+                  {i === step && (
                     <div
                       className="progress--child"
-                      style={
-                        i <= props.step ? { width: "50%" } : { width: "0%" }
-                      }
+                      style={i <= step ? { width: "50%" } : { width: "0%" }}
                     ></div>
                   )}
-                  {i < props.step && (
+                  {i < step && (
                     <div
                       className="progress--child"
                       style={{ width: "100%" }}
@@ -50,110 +48,6 @@ function RenderStep(props) {
   );
 }
 
-function FieldForm1(props) {
-  function handleChange(event) {
-    props.setQuote((prevData) => {
-      return {
-        ...prevData,
-        [event.target.name]: event.target.value,
-      };
-    });
-  }
-
-  const isValid =
-    props.id === "name" ||
-    (props.id === "email" &&
-      (props.value.trim() === "" || valEmail(props.value))) ||
-    (props.id === "phone" &&
-      (props.value.length === 0 || valPhone(props.value))) ||
-    (props.id === "company" && props.value.trim() != "");
-  return (
-    <div className="field--form1">
-      <label
-        className="label--form1"
-        htmlFor={props.id}
-        style={
-          isValid
-            ? { color: "var(--neutral-800)" }
-            : { color: "var(--primary-color2)" }
-        }
-      >
-        {props.label}
-      </label>
-      <div className="field--input">
-        <input
-          className="input"
-          id={props.id}
-          name={props.id}
-          type={props.id === "email" ? "email" : "text"}
-          placeholder={props.label}
-          onChange={handleChange}
-          value={props.value}
-        />
-        <img className="icon--form1" src={props.icon} alt={props.label} />
-      </div>
-      <span
-        className="label--msg"
-        style={isValid ? { visibility: "hidden" } : { visibility: "visible" }}
-      >
-        {props.msg}
-      </span>
-    </div>
-  );
-}
-
-function Form1(props) {
-  return (
-    <div className="form1">
-      <div className="header header--medium">Contact details</div>
-      <div className="description" style={{ marginBottom: "39.13px" }}>
-        Lorem ipsum dolor sit amet consectetur adipisc.
-      </div>
-      <div className="grid--container">
-        <div className="grid--box">
-          <FieldForm1
-            id="name"
-            label="Name"
-            icon="images/icon_name.png"
-            value={props.data.name}
-            setQuote={props.setQuote}
-          />
-        </div>
-        <div className="grid--box">
-          <FieldForm1
-            id="email"
-            label="Email"
-            icon="images/icon_email.png"
-            msg="Email is invalid."
-            value={props.data.email}
-            setQuote={props.setQuote}
-          />
-        </div>
-        <div className="grid--box">
-          <FieldForm1
-            id="phone"
-            label="Phone Number"
-            icon="images/icon_phone.png"
-            msg="Phone is invalid."
-            value={props.data.phone}
-            setQuote={props.setQuote}
-          />
-        </div>
-        <div className="grid--box">
-          <FieldForm1
-            id="company"
-            label="Company"
-            icon="images/icon_company.png"
-            msg="Company is required."
-            value={props.data.company}
-            setQuote={props.setQuote}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 const styleNormal = {
   border: "1px solid var(--neutral-300)",
   boxShadow: "0px 2px 6px rgba(19, 18, 66, 0.07)",
@@ -163,19 +57,19 @@ const styleSelected = {
   boxShadow: "0px 2px 6px rgba(19, 18, 66, 0.07)",
 };
 
-function FieldForm2(props) {
+function FieldForm2({ label, icon }) {
   return (
     <div className="field--form2">
       <div className="field--input2">
         <div className="circle--form2"></div>
-        <img className="icon--form2" src={props.icon} alt={props.label} />
+        <img className="icon--form2" src={icon} alt={label} />
       </div>
-      <div className="label--form2">{props.label}</div>
+      <div className="label--form2">{label}</div>
     </div>
   );
 }
 
-function Form2(props) {
+function Form2({ data, setFormValues }) {
   return (
     <div className="form1">
       <div className="header header--medium">Our services</div>
@@ -185,11 +79,9 @@ function Form2(props) {
       <div className="grid--container2">
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Development" ? styleSelected : styleNormal
-          }
+          style={data.service === "Development" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setQuote((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Development",
@@ -197,19 +89,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Development"
-            icon="images/icon_dev.png"
-            setQuote={props.setQuote}
-          />
+          <FieldForm2 label="Development" icon="images/icon_dev.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Web Design" ? styleSelected : styleNormal
-          }
+          style={data.service === "Web Design" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setQuote((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Web Design",
@@ -217,19 +103,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Web Design"
-            icon="images/icon_web.png"
-            setQuote={props.setQuote}
-          />
+          <FieldForm2 label="Web Design" icon="images/icon_web.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={
-            props.data.service === "Marketing" ? styleSelected : styleNormal
-          }
+          style={data.service === "Marketing" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setQuote((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Marketing",
@@ -237,17 +117,13 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Marketing"
-            icon="images/icon_mar.png"
-            setQuote={props.setQuote}
-          />
+          <FieldForm2 label="Marketing" icon="images/icon_mar.png" />
         </div>
         <div
           className="grid--box2 pointer"
-          style={props.data.service === "Other" ? styleSelected : styleNormal}
+          style={data.service === "Other" ? styleSelected : styleNormal}
           onClick={() => {
-            props.setQuote((prevData) => {
+            setFormValues((prevData) => {
               return {
                 ...prevData,
                 service: "Other",
@@ -255,21 +131,17 @@ function Form2(props) {
             });
           }}
         >
-          <FieldForm2
-            label="Other"
-            icon="images/icon_oth.png"
-            setQuote={props.setQuote}
-          />
+          <FieldForm2 label="Other" icon="images/icon_oth.png" />
         </div>
       </div>
     </div>
   );
 }
 
-function FieldForm3(props) {
+function FieldForm3({ name, label, value, setFormValues }) {
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
-    props.setQuote((prevData) => {
+    setFormValues((prevData) => {
       return {
         ...prevData,
         [name]: type === "checkbox" ? checked : value,
@@ -280,21 +152,21 @@ function FieldForm3(props) {
   return (
     <div className="radio">
       <input
-        id={props.label}
-        name={props.name}
-        value={props.label}
+        id={label}
+        name={name}
+        value={label}
         type="radio"
         onChange={handleChange}
-        checked={props.value === props.label}
+        checked={value === label}
       />
-      <label htmlFor={props.label} className="radio-label">
-        {props.label}
+      <label htmlFor={label} className="radio-label">
+        {label}
       </label>
     </div>
   );
 }
 
-function Form3(props) {
+function Form3({ data, setFormValues }) {
   return (
     <div className="form1">
       <div className="header header--medium">What’s your project budget?</div>
@@ -305,59 +177,51 @@ function Form3(props) {
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$5.000 - $10.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$5.000 - $10.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$5.000 - $10.000"
-            value={props.data.budget}
-            setQuote={props.setQuote}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$10.000 - $20.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$10.000 - $20.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$10.000 - $20.000"
-            value={props.data.budget}
-            setQuote={props.setQuote}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
           style={
-            props.data.budget === "$20.000 - $50.000"
-              ? styleSelected
-              : styleNormal
+            data.budget === "$20.000 - $50.000" ? styleSelected : styleNormal
           }
         >
           <FieldForm3
             name="budget"
             label="$20.000 - $50.000"
-            value={props.data.budget}
-            setQuote={props.setQuote}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
         <div
           className="grid--box2"
-          style={
-            props.data.budget === "$50.000 +" ? styleSelected : styleNormal
-          }
+          style={data.budget === "$50.000 +" ? styleSelected : styleNormal}
         >
           <FieldForm3
             name="budget"
             label="$50.000 +"
-            value={props.data.budget}
-            setQuote={props.setQuote}
+            value={data.budget}
+            setFormValues={setFormValues}
           />
         </div>
       </div>
@@ -365,7 +229,7 @@ function Form3(props) {
   );
 }
 
-function Form4(props) {
+function Form4({ data }) {
   return (
     <div className="form1 form4">
       <img
@@ -389,13 +253,32 @@ function Form4(props) {
       </div>
       <div
         className="button--submit"
-        onClick={() => alert(JSON.stringify(props.data))}
+        onClick={() => alert(JSON.stringify(data))}
       >
         Submit
       </div>
     </div>
   );
 }
+
+const Input = React.forwardRef(
+  ({ type, name, placeholder, icon, value, handleChange }, ref) => {
+    return (
+      <div className="field--input">
+        <input
+          className="input"
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={handleChange}
+          ref={ref}
+        />
+        <img className="icon--form1" src={icon} alt={placeholder} />
+      </div>
+    );
+  }
+);
 
 function Button(props) {
   return (
@@ -405,14 +288,14 @@ function Button(props) {
   );
 }
 
-function valEmail(email) {
+function validEmail(email) {
   if (/^\w+([\.-]?\w+)*@gmail.com$/.test(email)) {
     return true;
   }
   return false;
 }
 
-function valPhone(phone) {
+function validPhone(phone) {
   if (/^08?(\d{7,10}$)/.test(phone)) {
     return true;
   }
@@ -421,7 +304,7 @@ function valPhone(phone) {
 
 function App() {
   const [step, setStep] = React.useState(1);
-  const [quote, setQuote] = React.useState({
+  const [formValues, setFormValues] = React.useState({
     name: "",
     email: "",
     phone: "",
@@ -430,11 +313,71 @@ function App() {
     budget: "$50.000 +",
   });
 
+  const [inputValid, setInputValid] = React.useState({
+    name: true,
+    email: true,
+    phone: true,
+    company: true,
+  });
+
+  const nameRef = React.useRef();
+  const emailRef = React.useRef();
+  const phoneRef = React.useRef();
+  const companyRef = React.useRef();
+
+  function handleChange(event) {
+    setFormValues((prevData) => {
+      return {
+        ...prevData,
+        [event.target.name]: event.target.value,
+      };
+    });
+    setInputValid((prevData) => {
+      return {
+        ...prevData,
+        [event.target.name]: true,
+      };
+    });
+  }
+
   function handleIncrement() {
-    valEmail(quote.email) && // email validation
-      valPhone(quote.phone) && // phone validation
-      quote.company != "" && // is required
-      setStep((prevStep) => prevStep + 1);
+    if (formValues.name === "") {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          name: false,
+        };
+      });
+      return nameRef.current.focus();
+    }
+    if (!validEmail(formValues.email)) {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          email: false,
+        };
+      });
+      return emailRef.current.focus();
+    }
+    if (!validPhone(formValues.phone)) {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          phone: false,
+        };
+      });
+      return phoneRef.current.focus();
+    }
+    if (formValues.company === "") {
+      setInputValid((prevData) => {
+        return {
+          ...prevData,
+          company: false,
+        };
+      });
+      return companyRef.current.focus();
+    }
+    setStep((prevStep) => prevStep + 1);
   }
 
   function handleDecrement() {
@@ -457,10 +400,159 @@ function App() {
       <div className="container">
         <RenderStep step={step} />
         <div className="line" />
-        {step === 1 && <Form1 data={quote} setQuote={setQuote} />}
-        {step === 2 && <Form2 data={quote} setQuote={setQuote} />}
-        {step === 3 && <Form3 data={quote} setQuote={setQuote} />}
-        {step === 4 && <Form4 data={quote} />}
+        {step === 1 && (
+          <div className="form1">
+            <div className="header header--medium">Contact details</div>
+            <div className="description" style={{ marginBottom: "39.13px" }}>
+              Lorem ipsum dolor sit amet consectetur adipisc.
+            </div>
+            <div className="grid--container">
+              <div className="grid--box">
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="name"
+                    style={
+                      inputValid.name
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Name
+                  </label>
+                  <Input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    icon="images/icon_name.png"
+                    value={formValues.name}
+                    handleChange={handleChange}
+                    ref={nameRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.name
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Name is required
+                  </span>
+                </div>
+              </div>
+              <div className="grid--box">
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="email"
+                    style={
+                      inputValid.email
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    icon="images/icon_email.png"
+                    value={formValues.email}
+                    handleChange={handleChange}
+                    ref={emailRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.email
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Email is invalid.
+                  </span>
+                </div>
+              </div>
+              <div className="grid--box">
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="phone"
+                    style={
+                      inputValid.phone
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Phone Number
+                  </label>
+                  <Input
+                    type="number"
+                    name="phone"
+                    placeholder="Phone Number"
+                    icon="images/icon_phone.png"
+                    value={formValues.phone}
+                    handleChange={handleChange}
+                    ref={phoneRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.phone
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Phone number is invalid.
+                  </span>
+                </div>
+              </div>
+              <div className="grid--box">
+                <div className="field--form1">
+                  <label
+                    className="label--form1"
+                    htmlFor="company"
+                    style={
+                      inputValid.company
+                        ? { color: "var(--neutral-800)" }
+                        : { color: "var(--primary-color2)" }
+                    }
+                  >
+                    Company
+                  </label>
+                  <Input
+                    type="text"
+                    name="company"
+                    placeholder="Company"
+                    icon="images/icon_company.png"
+                    value={formValues.company}
+                    handleChange={handleChange}
+                    ref={companyRef}
+                  />
+                  <span
+                    className="label--msg"
+                    style={
+                      inputValid.company
+                        ? { visibility: "hidden" }
+                        : { visibility: "visible" }
+                    }
+                  >
+                    Company is required.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {step === 2 && (
+          <Form2 data={formValues} setFormValues={setFormValues} />
+        )}
+        {step === 3 && (
+          <Form3 data={formValues} setFormValues={setFormValues} />
+        )}
+        {step === 4 && <Form4 data={formValues} />}
       </div>
 
       <div
@@ -480,4 +572,8 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
