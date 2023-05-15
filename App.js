@@ -1,50 +1,57 @@
 "use strict";
 
 function RenderStep({ step }) {
-  const renderStep = [1, 2, 3, 4];
+  const renderStep = [
+    { id: '1', value: 1 },
+    { id: '2', value: 2 },
+    { id: '3', value: 3 },
+    { id: '4', value: 4 },
+  ];
   return (
     <div className="render--step">
-      {renderStep.map((i, index) => {
+      {renderStep.map((i) => {
         return (
-          <div className="step" key={self.crypto.randomUUID()}>
+          <div className="step" key={i.id} >
             <div
               className="step--circle"
               style={
-                i <= step
+                i.value <= step
                   ? {
-                      backgroundColor: "var(--primary-color)",
-                      color: "var(--neutral-100)",
-                    }
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--neutral-100)",
+                  }
                   : {
-                      backgroundColor: "var(--neutral-300)",
-                      color: "var(--neutral-600)",
-                    }
+                    backgroundColor: "var(--neutral-300)",
+                    color: "var(--neutral-600)",
+                  }
               }
             >
-              {i.toString()}
+              {i.value.toString()}
             </div>
-            {i < 4 && (
-              <div className="progress--container">
-                <div className="progress--inner">
-                  {i === step && (
-                    <div
-                      className="progress--child"
-                      style={i <= step ? { width: "50%" } : { width: "0%" }}
-                    ></div>
-                  )}
-                  {i < step && (
-                    <div
-                      className="progress--child"
-                      style={{ width: "100%" }}
-                    ></div>
-                  )}
+            {
+              i.value < 4 && (
+                <div className="progress--container">
+                  <div className="progress--inner">
+                    {i.value === step && (
+                      <div
+                        className="progress--child"
+                        style={i.value <= step ? { width: "50%" } : { width: "0%" }}
+                      ></div>
+                    )}
+                    {i.value < step && (
+                      <div
+                        className="progress--child"
+                        style={{ width: "100%" }}
+                      ></div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            }
           </div>
         );
       })}
-    </div>
+    </div >
   );
 }
 
@@ -314,10 +321,10 @@ function App() {
   });
 
   const [inputValid, setInputValid] = React.useState({
-    name: true,
-    email: true,
-    phone: true,
-    company: true,
+    name: { isRequired: true, emptyMessage: "", invalidMessage: "" },
+    email: { isRequired: true, emptyMessage: "Email is required.", invalidMessage: "Email is invalid." },
+    phone: { isRequired: true, emptyMessage: "Phone is required.", invalidMessage: "Phone is invalid." },
+    company: { isRequired: true, emptyMessage: "Company is required.", invalidMessage: "" },
   });
 
   const nameRef = React.useRef();
@@ -335,7 +342,7 @@ function App() {
     setInputValid((prevData) => {
       return {
         ...prevData,
-        [event.target.name]: true,
+        [event.target.name]: { isRequired: true, emptyMessage: "", invalidMessage: "" },
       };
     });
   }
@@ -345,7 +352,7 @@ function App() {
       setInputValid((prevData) => {
         return {
           ...prevData,
-          name: false,
+          name: { isRequired: false, emptyMessage: "Name is required.", invalidMessage: "" },
         };
       });
       return nameRef.current.focus();
@@ -354,7 +361,7 @@ function App() {
       setInputValid((prevData) => {
         return {
           ...prevData,
-          email: false,
+          email: { isRequired: false, emptyMessage: "Email is required.", invalidMessage: "Email is invalid." },
         };
       });
       return emailRef.current.focus();
@@ -363,7 +370,7 @@ function App() {
       setInputValid((prevData) => {
         return {
           ...prevData,
-          phone: false,
+          phone: { isRequired: false, emptyMessage: "Phone is required.", invalidMessage: "Phone is invalid." },
         };
       });
       return phoneRef.current.focus();
@@ -372,7 +379,7 @@ function App() {
       setInputValid((prevData) => {
         return {
           ...prevData,
-          company: false,
+          company: { isRequired: false, emptyMessage: "Company is required.", invalidMessage: "" },
         };
       });
       return companyRef.current.focus();
@@ -413,7 +420,7 @@ function App() {
                     className="label--form1"
                     htmlFor="name"
                     style={
-                      inputValid.name
+                      inputValid.name.isRequired
                         ? { color: "var(--neutral-800)" }
                         : { color: "var(--primary-color2)" }
                     }
@@ -432,12 +439,12 @@ function App() {
                   <span
                     className="label--msg"
                     style={
-                      inputValid.name
+                      inputValid.name.isRequired
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }
                     }
                   >
-                    Name is required
+                    {formValues.name === "" ? inputValid.name.emptyMessage : inputValid.name.invalidMessage}
                   </span>
                 </div>
               </div>
@@ -447,7 +454,7 @@ function App() {
                     className="label--form1"
                     htmlFor="email"
                     style={
-                      inputValid.email
+                      inputValid.email.isRequired
                         ? { color: "var(--neutral-800)" }
                         : { color: "var(--primary-color2)" }
                     }
@@ -466,12 +473,12 @@ function App() {
                   <span
                     className="label--msg"
                     style={
-                      inputValid.email
+                      inputValid.email.isRequired
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }
                     }
                   >
-                    Email is invalid.
+                    {formValues.email === "" ? inputValid.email.emptyMessage : inputValid.email.invalidMessage}
                   </span>
                 </div>
               </div>
@@ -481,7 +488,7 @@ function App() {
                     className="label--form1"
                     htmlFor="phone"
                     style={
-                      inputValid.phone
+                      inputValid.phone.isRequired
                         ? { color: "var(--neutral-800)" }
                         : { color: "var(--primary-color2)" }
                     }
@@ -500,12 +507,12 @@ function App() {
                   <span
                     className="label--msg"
                     style={
-                      inputValid.phone
+                      inputValid.phone.isRequired
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }
                     }
                   >
-                    Phone number is invalid.
+                    {formValues.phone === "" ? inputValid.phone.emptyMessage : inputValid.phone.invalidMessage}
                   </span>
                 </div>
               </div>
@@ -515,7 +522,7 @@ function App() {
                     className="label--form1"
                     htmlFor="company"
                     style={
-                      inputValid.company
+                      inputValid.company.isRequired
                         ? { color: "var(--neutral-800)" }
                         : { color: "var(--primary-color2)" }
                     }
@@ -534,12 +541,12 @@ function App() {
                   <span
                     className="label--msg"
                     style={
-                      inputValid.company
+                      inputValid.company.isRequired
                         ? { visibility: "hidden" }
                         : { visibility: "visible" }
                     }
                   >
-                    Company is required.
+                    {formValues.company === "" ? inputValid.company.emptyMessage : inputValid.company.invalidMessage}
                   </span>
                 </div>
               </div>
